@@ -37,6 +37,10 @@ int get_netdevice_info()
     {
         perror("ioctl failed");
     }
+    else
+    {
+
+    }
 
 
 }
