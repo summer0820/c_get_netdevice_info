@@ -39,7 +39,7 @@ int get_netdevice_info()
     }
     else
     {
-        //l
+        //ceshi
     }
 
 
