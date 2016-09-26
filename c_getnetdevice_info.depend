@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1474903446 source:/home/manfred/Documents/code::block_project/c_get_netdevice_info/c_getnetdevice_info.c
+	<stdio.h>
+	<string.h>
+	<net/if.h>
+	<sys/ioctl.h>
+	<arpa/inet.h>
+	<errno.h>
+	<sys/socket.h>
+	<unistd.h>
+
