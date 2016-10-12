@@ -90,12 +90,31 @@ int get_netdevice_info()
                 snprintf(ip_addr,sizeof(ip_addr),"%s",(char *)(inet_ntoa(((struct sockaddr_in *)&(ifr_buf[interface_num].ifr_addr))->sin_addr)));
                 printf("device %s ip address is %s\n",ifr_buf[interface_num].ifr_name,ip_addr);
             }
+            if(ioctl(fd,SIOCGIFBRDADDR,(char *)&(ifr_buf[interface_num]))<0)
+            {
+                printf("ioctl: %s [%s:%d]\n",strerror(errno),__FILE__, __LINE__);
+                close(fd);
+                return -1;
+            }
+            else
+            {
+                snprintf(broad_addr,sizeof(broad_addr),"%s",(char *)(inet_ntoa(((struct sockaddr_in *)&(ifr_buf[interface_num].ifr_broadaddr))->sin_addr)));
+                printf("device %s broad address is %s\n",ifr_buf[interface_num].ifr_name,broad_addr);
+            }
+            if(ioctl(fd,SIOCGIFNETMASK,(char *)&(ifr_buf[interface_num]))<0)
+            {
+                printf("ioctl: %s [%s:%d]\n",strerror(errno),__FILE__, __LINE__);
+                close(fd);
+                return -1;
+            }
+            else
+            {
+                snprintf(mask_addr,sizeof(mask_addr),"%s",(char *)(inet_ntoa(((struct sockaddr_in *)&(ifr_buf[interface_num].ifr_netmask))->sin_addr)));
+                printf("device %s netmask address is %s\n",ifr_buf[interface_num].ifr_name,mask_addr);
+            }
         }
-
-
-
     }
-
+    close(fd);
     return 0;
 }
 
