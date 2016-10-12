@@ -20,7 +20,7 @@ int get_netdevice_info()
     char broad_addr[32];                //广播地址
     char mask_addr[32];                 //子网掩码
 
-    memset(mac_addr,0,16);
+    memset(mac_addr,0,32);
     memset(ip_addr,0,32);
     memset(broad_addr,0,32);
     memset(mask_addr,0,32);
@@ -59,7 +59,7 @@ int get_netdevice_info()
                 return -1;
             }
 
-            if(ioctl(fd,SIOCGIFHWADDR,(char *)(&ifr_buf[interface_num]))<0)
+            if(ioctl(fd,SIOCGIFHWADDR,(char *)(&ifr_buf[interface_num]))<0)     //
             {
                 printf("ioctl: %s [%s:%d]\n",strerror(errno),__FILE__, __LINE__);
                 close(fd);
@@ -75,8 +75,20 @@ int get_netdevice_info()
                             (unsigned char)ifr_buf[interface_num].ifr_hwaddr.sa_data[3],
                             (unsigned char)ifr_buf[interface_num].ifr_hwaddr.sa_data[4],
                             (unsigned char)ifr_buf[interface_num].ifr_hwaddr.sa_data[5]);
-                printf("device %s mac adress is %s\n",ifr_buf[interface_num].ifr_name,mac_addr);
+                printf("device %s mac address is %s\n",ifr_buf[interface_num].ifr_name,mac_addr);
 
+            }
+
+            if(ioctl(fd,SIOCGIFADDR,(char *)(&ifr_buf[interface_num]))<0)
+            {
+                printf("ioctl: %s [%s:%d]\n",strerror(errno),__FILE__, __LINE__);
+                close(fd);
+                return -1;
+            }
+            else
+            {
+                snprintf(ip_addr,sizeof(ip_addr),"%s",(char *)(inet_ntoa(((struct sockaddr_in *)&(ifr_buf[interface_num].ifr_addr))->sin_addr)));
+                printf("device %s ip address is %s\n",ifr_buf[interface_num].ifr_name,ip_addr);
             }
         }
 
